@@ -26,11 +26,21 @@
 			<artifactId>storm-core</artifactId>
 			<version>0.9.1-incubating</version>
 		</dependency>
+		<dependency>
+			<groupId>org.apache.spark</groupId>
+			<artifactId>spark-core_2.10</artifactId>
+			<version>1.0.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.spark</groupId>
+			<artifactId>spark-streaming_2.10</artifactId>
+			<version>1.0.0</version>
+		</dependency>
 	</dependencies>
 
 	<build>
 		<plugins>
-<plugin>
+			<plugin>
 				<!-- just define the Java version to be used for compiling and plugins -->
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
@@ -80,34 +90,25 @@
 					</execution>
 				</executions>
 			</plugin>
-			
-			<!--
-			Bind the maven-assembly-plugin to the package phase
-			this will create a jar file without the storm dependencies
-			suitable for deployment to a cluster.
-			-->
 			<plugin>
-				<artifactId>maven-assembly-plugin</artifactId>
-				<configuration>
-					<descriptorRefs>
-						<descriptorRef>jar-with-dependencies</descriptorRef>
-					</descriptorRefs>
-					<archive>
-						<manifest>
-							<mainClass></mainClass>
-						</manifest>
-					</archive>
-				</configuration>
-				<executions>
-					<execution>
-						<id>make-assembly</id>
-						<phase>package</phase>
-						<goals>
-							<goal>single</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
+                		<groupId>org.scala-tools</groupId>
+                		<artifactId>maven-scala-plugin</artifactId>
+                		<executions>
+				     <execution>
+                		        <goals>
+						<goal>compile</goal>
+						<goal>testCompile</goal>
+		                        </goals>
+                		    </execution>
+                		</executions>
+                		<configuration>
+                    			<sourceDir>src/main/scala</sourceDir>
+                    			<jvmArgs>
+                        			<jvmArg>-Xms64m</jvmArg>
+                        			<jvmArg>-Xmx1024m</jvmArg>
+                   		 	</jvmArgs>
+                		</configuration>
+          		  </plugin>
 		</plugins>
 	</build>
 </project>
